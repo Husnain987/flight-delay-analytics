@@ -1,0 +1,8 @@
+day_of_week,total_flights,delayed_flights,delay_rate_pct,avg_dep_delay_min
+Monday,1073959,217141,20.22,12.73
+Tuesday,976073,172267,17.65,10.46
+Wednesday,973179,179028,18.4,10.42
+Thursday,1041956,224168,21.51,13.16
+Friday,1055419,241937,22.92,14.66
+Saturday,911515,183315,20.11,12.59
+Sunday,1046980,232116,22.17,14.39
