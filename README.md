@@ -4,6 +4,8 @@ An end-to-end data pipeline analyzing **7M+ US domestic flights** from 2024, tak
 
 **📊 [View the live dashboard on Tableau Public →](https://public.tableau.com/app/profile/husnain.abbas7784/viz/USFlightDelays2024/Dashboard1)**
 
+[![US Flight Delays 2024 dashboard](assets/dashboard.png)](https://public.tableau.com/app/profile/husnain.abbas7784/viz/USFlightDelays2024/Dashboard1)
+
 ---
 
 ## Overview
@@ -16,7 +18,7 @@ This project ingests the full year of **Bureau of Transportation Statistics (BTS
 
 ## Architecture
 
-**Raw BTS CSVs → Python ETL (pandas) → Parquet → Google BigQuery → Tableau Public**
+**Raw BTS CSVs → Python ETL (pandas) → Parquet → Google BigQuery → SQL aggregation → Tableau Public**
 
 ## Pipeline
 
@@ -24,7 +26,18 @@ This project ingests the full year of **Bureau of Transportation Statistics (BTS
 
 **`src/02_load_bigquery.py`** — Loads the cleaned Parquet into a BigQuery table using a service-account credential, making the full 7M-row dataset queryable in the cloud.
 
-Aggregation queries were run in BigQuery and exported to `data/tableau/` as the inputs for each dashboard view.
+## SQL
+
+All dashboard views are powered by aggregation queries run against the 7M-row BigQuery table. Each query lives in [`sql/`](sql/) and exports one CSV to `data/tableau/`:
+
+| Query | Feeds |
+|---|---|
+| [`delay_by_airline.sql`](sql/delay_by_airline.sql) | Carrier delay-rate ranking |
+| [`delay_by_month.sql`](sql/delay_by_month.sql) | Seasonal trend line |
+| [`delay_by_dow.sql`](sql/delay_by_dow.sql) | Day-of-week comparison |
+| [`delay_by_airport.sql`](sql/delay_by_airport.sql) | Airport map (top 30 by traffic) |
+| [`worst_routes.sql`](sql/worst_routes.sql) | Worst origin→destination routes |
+| [`delay_heatmap_dow_month.sql`](sql/delay_heatmap_dow_month.sql) | Day-of-week × month heatmap |
 
 ## Dashboard
 
@@ -50,3 +63,4 @@ The raw data and cleaned Parquet are excluded from the repo (large / regenerable
 1. Download 2024 On-Time Performance data from BTS
 2. `python src/01_clean.py` — produces the cleaned Parquet
 3. Add your BigQuery `credentials.json`, then `python src/02_load_bigquery.py` — loads to BigQuery
+4. Run the queries in `sql/` against your BigQuery table and export the results to `data/tableau/`
