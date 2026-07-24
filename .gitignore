@@ -6,3 +6,7 @@ __pycache__/
 .ipynb_checkpoints/
 credentials.json
 *.key
+
+data/model/
+run03.log
+*.log
